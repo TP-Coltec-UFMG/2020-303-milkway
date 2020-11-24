@@ -1,3 +1,3 @@
 # milkway
 Jogo acessível com pygame
-## Feito por Erick, Eric
+## Feito por Erick, Eric, Amanda
