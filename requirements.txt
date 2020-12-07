@@ -1,3 +1,4 @@
 PyOpenAL
 PyOgg
 Pygame-menu
+pygame

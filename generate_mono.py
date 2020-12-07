@@ -26,11 +26,11 @@ def generate_mono(frequency, filename):
 
 
 def generate_files():
-    generate_mono(400, "assets/b400.wav")
-    generate_mono(500, "assets/b500.wav")
-    generate_mono(600, "assets/b600.wav")
-    generate_mono(700, "assets/b700.wav")
-    generate_mono(800, "assets/b800.wav")
-    generate_mono(900, "assets/b900.wav")
-    generate_mono(1000, "assets/b1000.wav")
-    generate_mono(1100, "assets/b1100.wav")
+    generate_mono(400, "assets/sounds/b400.wav")
+    generate_mono(500, "assets/sounds/b500.wav")
+    generate_mono(600, "assets/sounds/b600.wav")
+    generate_mono(700, "assets/sounds/b700.wav")
+    generate_mono(800, "assets/sounds/b800.wav")
+    generate_mono(900, "assets/sounds/b900.wav")
+    generate_mono(1000, "assets/sounds/b1000.wav")
+    generate_mono(1100, "assets/sounds/b1100.wav")

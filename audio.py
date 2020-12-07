@@ -1,6 +1,12 @@
 import openal as oal
 import time
 
+testes = {
+    400: "assets/sounds/b400.wav",
+    700: "assets/sounds/b700.wav",
+    1100: "assets/sounds/b1100.wav"
+}
+
 
 def make_sounds(positions, sounds):
     """
@@ -28,6 +34,6 @@ def make_sounds(positions, sounds):
     # oal.oalQuit()
 
 
-make_sounds([(2, 0, -5), (-4, 0, -7), (6, 0, -4)], ["assets/b400.wav", "assets/b700.wav", "assets/b1100.wav"])
-make_sounds([(2, 0, -3), (-4, 0, -5), (6, 0, -2)], ["assets/b400.wav", "assets/b700.wav", "assets/b1100.wav"])
+make_sounds([(2, 0, -5), (-4, 0, -7), (6, 0, -4)], [testes[400], testes[700], testes[1100]])
+make_sounds([(2, 0, -3), (-4, 0, -5), (6, 0, -2)], [testes[400], testes[700], testes[1100]])
 oal.oalQuit()
