@@ -1,10 +1,18 @@
 # Precisa baixar: pip install pygame-menu
 import pygame
 import pygame_menu
-from pygame.locals import *
 from random import randrange
+from radar import generate_mono
 
 pygame.init()
+
+# Som/Radar
+pygame.mixer.init()
+som_radar = generate_mono(440)
+som = pygame.mixer.Sound(som_radar)
+RADAREVENT = pygame.USEREVENT+1
+pygame.time.set_timer(RADAREVENT, 750)  # 800 ms para cada apito
+
 screen_width = 900
 screen_height = 500
 surface = pygame.display.set_mode((screen_width, screen_height))
@@ -21,6 +29,12 @@ VERDE = (0, 255, 0)
 # coloca imagem de fundo na tela
 def draw_bg():
     surface.blit(bg, (0, 0))
+
+
+def radar(nave, asteroides=[], *args):
+    for a in asteroides:
+        if (a.rect.x-50 <= nave.rect.x) and (a.rect.x+50 >= nave.rect.x):
+            som.play()
 
 
 # Classe Nave principal
@@ -49,7 +63,6 @@ class Nave(pygame.sprite.Sprite):
         pygame.draw.polygon(surface, VERMELHO,
                             ((14, 20), (25, 32), (35, 20)), 0)
 
-
 class Asteroides(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -58,7 +71,7 @@ class Asteroides(pygame.sprite.Sprite):
         self.rect.center = [x, y]
 
     def update(self):
-        self.rect.y += 4
+        self.rect.y += 6
 
 
 grupo_naves = pygame.sprite.Group()
@@ -75,10 +88,12 @@ def Game_Start():
     fps = 60
 
     # qtd de asteroides criados por vez
-    qtd_asteroides = 4
+    qtd_asteroides = 8
 
-    rum = True
-    while True:
+    # controlador para sair
+    run = True
+
+    while run:
 
         # fps da tela
         clock.tick(fps)
@@ -88,9 +103,11 @@ def Game_Start():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run = False
                 pygame.quit()
-                rum = False
                 break
+            if event.type == RADAREVENT:
+                radar(nave, grupo_asteroides)
 
         # Cria asteroides se não existem na tela
         if qtd_asteroides > 0:
@@ -99,10 +116,10 @@ def Game_Start():
             grupo_asteroides.add(asteroide)
 
         for asteroide in grupo_asteroides:
-            asteroide.update()
-            if asteroide.rect.y > screen_width:
+            if asteroide.rect.y > screen_height+10:
                 grupo_asteroides.remove(asteroide)
                 qtd_asteroides += 1
+            asteroide.update()
 
         nave.movimento()
         grupo_naves.draw(surface)
