@@ -71,7 +71,7 @@ class Asteroides(pygame.sprite.Sprite):
         self.rect.center = [x, y]
 
     def update(self):
-        self.rect.y += 6
+        self.rect.y += 2
 
 
 grupo_naves = pygame.sprite.Group()
@@ -88,7 +88,7 @@ def Game_Start():
     fps = 60
 
     # qtd de asteroides criados por vez
-    qtd_asteroides = 8
+    qtd_asteroides = 4
 
     # controlador para sair
     run = True
