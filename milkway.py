@@ -12,7 +12,7 @@ pygame.mixer.init()
 som_radar = generate_mono(440)
 som = pygame.mixer.Sound(som_radar)
 RADAREVENT = pygame.USEREVENT+1
-pygame.time.set_timer(RADAREVENT, 750)  # 800 ms para cada apito
+pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
 f = 0.7  # fator de divisao para tornar o som mais proximo
 
@@ -77,7 +77,8 @@ class Asteroides(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         # seleciona um arquivo aleatorio de audio
-        self.source = oal.oalOpen("assets/sounds/b"+str(randrange(400, 1100, 100))+".wav")
+        self.source = oal.oalOpen(
+            "assets/sounds/b"+str(randrange(400, 1100, 100))+".wav")
         self.source.set_looping(True)
         self.source.set_position((x, 0, y))
         self.source.play()
@@ -93,6 +94,8 @@ class Asteroides(pygame.sprite.Sprite):
 
     def stop_sound(self):
         self.source.stop()
+        # Limpar memória, pesquisar por forma correta (isso dá erro)
+        self.source.destroy()
 
 
 grupo_naves = pygame.sprite.Group()
