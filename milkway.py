@@ -3,6 +3,7 @@ import pygame
 import pygame_menu
 from random import randrange
 from radar import generate_mono
+import openal as oal
 
 pygame.init()
 
@@ -12,6 +13,8 @@ som_radar = generate_mono(440)
 som = pygame.mixer.Sound(som_radar)
 RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 800 ms para cada apito
+
+f = 0.7  # fator de divisao para tornar o som mais proximo
 
 screen_width = 900
 screen_height = 500
@@ -46,6 +49,7 @@ class Nave(pygame.sprite.Sprite):
         self.rect.center = [x, y]
         self.vidas_inicio = vida
         self.vidas_restantes = vida
+        self.listen = oal.oalGetListener()
 
     def movimento(self):
         # pegar movimentos do teclado
@@ -62,6 +66,9 @@ class Nave(pygame.sprite.Sprite):
         pygame.draw.circle(surface, VERMELHO, (30, 20), 5, 0)
         pygame.draw.polygon(surface, VERMELHO,
                             ((14, 20), (25, 32), (35, 20)), 0)
+        # mudando posicao do listener para se adequar a nave
+        self.listen.set_position((self.rect.x, 0, self.rect.y/f))
+
 
 class Asteroides(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -69,9 +76,23 @@ class Asteroides(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets/images/asteroides.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        # seleciona um arquivo aleatorio de audio
+        self.source = oal.oalOpen("assets/sounds/b"+str(randrange(400, 1100, 100))+".wav")
+        self.source.set_looping(True)
+        self.source.set_position((x, 0, y))
+        self.source.play()
 
-    def update(self):
+    def update(self, nave):  # nave sera usada no futuro
+        """
+        Atualiza a posicao do asteroide e a fonte de som dele
+        """
         self.rect.y += 2
+        # atualizando fonte do som
+        self.source.set_position((self.rect.x, 0, self.rect.y/f))
+        self.source.update()
+
+    def stop_sound(self):
+        self.source.stop()
 
 
 grupo_naves = pygame.sprite.Group()
@@ -103,11 +124,13 @@ def Game_Start():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                oal.oalQuit()
                 run = False
                 pygame.quit()
                 break
             if event.type == RADAREVENT:
-                radar(nave, grupo_asteroides)
+                pass
+                # radar(nave, grupo_asteroides)
 
         # Cria asteroides se não existem na tela
         if qtd_asteroides > 0:
@@ -117,9 +140,11 @@ def Game_Start():
 
         for asteroide in grupo_asteroides:
             if asteroide.rect.y > screen_height+10:
+                asteroide.stop_sound()  # encerra o som do asteroide
                 grupo_asteroides.remove(asteroide)
                 qtd_asteroides += 1
-            asteroide.update()
+            else:
+                asteroide.update(nave)
 
         nave.movimento()
         grupo_naves.draw(surface)
