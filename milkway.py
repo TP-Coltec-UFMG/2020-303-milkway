@@ -28,10 +28,11 @@ bg = pygame.image.load("assets/images/espaço.gif")
 VERMELHO = (255, 0, 0)
 VERDE = (0, 255, 0)
 BRANCO = (255, 255, 255)
-PRETO =(0, 0, 0)
+PRETO = (0, 0, 0)
 
-#fonte da letra
+# fonte da letra
 fonte = pygame.font.SysFont("arial", 20, True, False)
+
 
 # coloca imagem de fundo na tela
 def draw_bg():
@@ -69,10 +70,12 @@ class Nave(pygame.sprite.Sprite):
         # desenha vidas
         pygame.draw.rect(surface, VERMELHO, (20, 40, self.rect.width, 15))
         if self.vidas_restantes > 0:
-            pygame.draw.rect(surface, VERDE,(20, 40, int(self.rect.width * (self.vidas_restantes/self.vidas_inicio)), 15))
+            pygame.draw.rect(surface, VERDE, (20, 40, int(
+                self.rect.width*(self.vidas_restantes/self.vidas_inicio)), 15))
 
         # mudando posicao do listener para se adequar a nave
         self.listen.set_position((self.rect.x, 0, self.rect.y/f))
+
 
 class Asteroides(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -88,7 +91,7 @@ class Asteroides(pygame.sprite.Sprite):
         self.source.set_position((x, 0, y))
         self.source.play()
 
-    def update(self, nave):  # nave sera usada no futuro
+    def update(self):
         """
         Atualiza a posicao do asteroide e a fonte de som dele
         """
@@ -97,18 +100,10 @@ class Asteroides(pygame.sprite.Sprite):
         # atualizando fonte do som
         self.source.set_position((self.rect.x, 0, self.rect.y/f))
         self.source.update()
-        self.colisao()
-
-    #faz a colisão dos asteroides com a nave
-    def colisao(self):
-        if pygame.sprite.spritecollide(self, grupo_naves, False):
-            self.kill()
-            nave.vidas_restantes -= 1
-
 
     def stop_sound(self):
         self.source.stop()
-        # Limpar memória, pesquisar por forma correta (isso dá erro)
+        # Limpar memória
         self.source.destroy()
 
 
@@ -156,10 +151,16 @@ def Game_Start():
             grupo_asteroides.add(asteroide)
 
         for asteroide in grupo_asteroides:
-            if asteroide.rect.y > screen_height+10:
+            # +30 pro som demorar um poquinho pra ir embora
+            if asteroide.rect.y > screen_height+30:
                 asteroide.stop_sound()  # encerra o som do asteroide
-                grupo_asteroides.remove(asteroide)
                 qtd_asteroides += 1
+                asteroide.kill()
+            elif pygame.sprite.spritecollide(asteroide, grupo_naves, False):
+                nave.vidas_restantes -= 1
+                asteroide.stop_sound()  # encerra o som do asteroide
+                qtd_asteroides += 1
+                asteroide.kill()
             else:
                 asteroide.update()
 
