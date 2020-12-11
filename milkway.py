@@ -27,11 +27,17 @@ bg = pygame.image.load("assets/images/espaço.gif")
 # definindo cores
 VERMELHO = (255, 0, 0)
 VERDE = (0, 255, 0)
+BRANCO = (255, 255, 255)
+PRETO =(0, 0, 0)
 
+#fonte da letra
+fonte = pygame.font.SysFont("arial", 20, True, False)
 
 # coloca imagem de fundo na tela
 def draw_bg():
     surface.blit(bg, (0, 0))
+    texto_img = fonte.render("ESTABILIDADE DA NAVE", True, BRANCO)
+    surface.blit(texto_img, (20, 15))
 
 
 def radar(nave, asteroides=[], *args):
@@ -51,7 +57,7 @@ class Nave(pygame.sprite.Sprite):
         self.vidas_restantes = vida
         self.listen = oal.oalGetListener()
 
-    def movimento(self):
+    def update(self):
         # pegar movimentos do teclado
         velocidade = 8
         key = pygame.key.get_pressed()
@@ -60,15 +66,13 @@ class Nave(pygame.sprite.Sprite):
         if key[pygame.K_RIGHT] and self.rect.right < screen_width:
             self.rect.x += velocidade
 
-        # pintar vidas
-        # coração
-        pygame.draw.circle(surface, VERMELHO, (20, 20), 5, 0)
-        pygame.draw.circle(surface, VERMELHO, (30, 20), 5, 0)
-        pygame.draw.polygon(surface, VERMELHO,
-                            ((14, 20), (25, 32), (35, 20)), 0)
+        # desenha vidas
+        pygame.draw.rect(surface, VERMELHO, (20, 40, self.rect.width, 15))
+        if self.vidas_restantes > 0:
+            pygame.draw.rect(surface, VERDE,(20, 40, int(self.rect.width * (self.vidas_restantes/self.vidas_inicio)), 15))
+
         # mudando posicao do listener para se adequar a nave
         self.listen.set_position((self.rect.x, 0, self.rect.y/f))
-
 
 class Asteroides(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -76,6 +80,7 @@ class Asteroides(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets/images/asteroides.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+
         # seleciona um arquivo aleatorio de audio
         self.source = oal.oalOpen(
             "assets/sounds/b"+str(randrange(400, 1100, 100))+".wav")
@@ -88,9 +93,18 @@ class Asteroides(pygame.sprite.Sprite):
         Atualiza a posicao do asteroide e a fonte de som dele
         """
         self.rect.y += 2
+
         # atualizando fonte do som
         self.source.set_position((self.rect.x, 0, self.rect.y/f))
         self.source.update()
+        self.colisao()
+
+    #faz a colisão dos asteroides com a nave
+    def colisao(self):
+        if pygame.sprite.spritecollide(self, grupo_naves, False):
+            self.kill()
+            nave.vidas_restantes -= 1
+
 
     def stop_sound(self):
         self.source.stop()
@@ -99,7 +113,7 @@ class Asteroides(pygame.sprite.Sprite):
 
 
 grupo_naves = pygame.sprite.Group()
-nave = Nave(int(screen_width/2), screen_height - 50, 3)
+nave = Nave(int(screen_width/2), screen_height - 50, 5)
 grupo_naves.add(nave)
 
 grupo_asteroides = []
@@ -147,9 +161,9 @@ def Game_Start():
                 grupo_asteroides.remove(asteroide)
                 qtd_asteroides += 1
             else:
-                asteroide.update(nave)
+                asteroide.update()
 
-        nave.movimento()
+        nave.update()
         grupo_naves.draw(surface)
         grupo_asteroides.draw(surface)
         pygame.display.update()
