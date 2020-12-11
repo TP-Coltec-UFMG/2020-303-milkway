@@ -11,7 +11,7 @@ pygame.init()
 pygame.mixer.init()
 som_radar = generate_mono(440)
 som = pygame.mixer.Sound(som_radar)
-boom = pygame.mixer.Sound("assets/sounds/bip2.ogg")
+boom = oal.oalOpen("assets/sounds/bip2.ogg")
 RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
@@ -139,6 +139,7 @@ def Game_Start():
             if event.type == pygame.QUIT:
                 oal.oalQuit()
                 run = False
+                pygame.mixer.stop()
                 pygame.quit()
                 break
             if event.type == RADAREVENT:
