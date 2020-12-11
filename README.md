@@ -20,7 +20,7 @@ $ git clone https://github.com/TP-Coltec-UFMG/milkway
 # Acesse o diretorio
 $ cd milkway
 
-# Instale as dependecias
+# Instale as dependencias
 $ pip install -r requirements.txt
 
 # Execute milkway.py
