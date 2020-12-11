@@ -2,16 +2,16 @@
 
 # milkway
 
-## Jogo acessível com pygame
+## Jogo acessível com pygame :sunglasses:
 
 :milky_way: milkway :rocket: Em desenvolvimento :milky_way:
 
-### Pré-requisitos
+### Pré-requisitos :heavy_check_mark:
 
 Antes de começar a jogar você precisa ter instalado:
 [Python](https://www.python.org/), [Git](https://git-scm.com/).
 
-### Rodando o jogo
+### Rodando o jogo :video_game:
 
 ```bash
 # Clone o repositorio
@@ -27,5 +27,5 @@ $ pip install -r requirements.txt
 $ python milkway.py
 ```
 
-### Autores
+### Autores :pencil2:
 Amanda, Eric, Erick, Marcela
