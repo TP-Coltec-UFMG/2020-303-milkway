@@ -28,4 +28,7 @@ $ python milkway.py
 ```
 
 ### Autores :pencil2:
-Amanda, Eric, Erick, Marcela
+[Amanda](https://github.com/Fiaux12),
+[Eric](https://github.com/mifegui),
+[Erick](https://github.com/erickRochaIP),
+[Marcela](https://github.com/MDonata)
