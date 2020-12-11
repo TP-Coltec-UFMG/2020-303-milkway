@@ -11,6 +11,7 @@ pygame.init()
 pygame.mixer.init()
 som_radar = generate_mono(440)
 som = pygame.mixer.Sound(som_radar)
+boom = pygame.mixer.Sound("assets/sounds/bip2.ogg")
 RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
@@ -157,6 +158,7 @@ def Game_Start():
                 qtd_asteroides += 1
                 asteroide.kill()
             elif pygame.sprite.spritecollide(asteroide, grupo_naves, False):
+                boom.play()
                 nave.vidas_restantes -= 1
                 asteroide.stop_sound()  # encerra o som do asteroide
                 qtd_asteroides += 1
