@@ -116,13 +116,13 @@ grupo_asteroides = []
 grupo_asteroides = pygame.sprite.Group()
 
 
-def Game_Start():
+def Game_Start(blind_mode=False):
     # fps do jogo
     clock = pygame.time.Clock()
     fps = 60
 
     # qtd de asteroides criados por vez
-    qtd_asteroides = 4
+    qtd_asteroides = 2
 
     # controlador para sair
     run = True
@@ -170,10 +170,14 @@ def Game_Start():
         nave.update()
         grupo_naves.draw(surface)
         grupo_asteroides.draw(surface)
+        if blind_mode:
+            surface.fill((0, 0, 0))
         pygame.display.update()
 
     pygame.quit()
 
+def Blind_Game_Start():
+    Game_Start(True)
 
 # Carrega imagem de fundo do Menu
 myimage = pygame_menu.baseimage.BaseImage(
@@ -198,7 +202,7 @@ mytheme = pygame_menu.themes.Theme(
 menu = pygame_menu.Menu(screen_height, screen_width, 'MilkWay', theme=mytheme)
 menu.add_button('Jogar', Game_Start)
 menu.add_button('Instrucoes', pygame_menu.events.EXIT)
-menu.add_button('Blind Mode', pygame_menu.events.EXIT)
+menu.add_button('Blind Mode', Blind_Game_Start)
 menu.add_button('Sair', pygame_menu.events.EXIT)
 
 menu.mainloop(surface)
