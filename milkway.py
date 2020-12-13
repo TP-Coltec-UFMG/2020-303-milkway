@@ -4,6 +4,7 @@ import pygame_menu
 from random import randrange
 from radar import generate_mono
 import openal as oal
+import openal.al as al
 
 pygame.init()
 
@@ -105,7 +106,7 @@ class Asteroides(pygame.sprite.Sprite):
     def stop_sound(self):
         self.source.stop()
         # Limpar memória
-        self.source.destroy()
+        al.alDeleteSources(1, self.source.id)
 
 
 grupo_naves = pygame.sprite.Group()
@@ -176,8 +177,10 @@ def Game_Start(blind_mode=False):
 
     pygame.quit()
 
+
 def Blind_Game_Start():
     Game_Start(True)
+
 
 # Carrega imagem de fundo do Menu
 myimage = pygame_menu.baseimage.BaseImage(
