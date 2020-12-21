@@ -93,6 +93,11 @@ class Asteroides(pygame.sprite.Sprite):
         self.source.set_position((x, 0, y))
         self.source.play()
 
+    def __del__(self):
+        # quando for deletado essa funcao sera chamada
+        self.stop_sound()
+        del self.source
+
     def update(self):
         """
         Atualiza a posicao do asteroide e a fonte de som dele
@@ -138,7 +143,9 @@ def Game_Start(blind_mode=False):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                oal.oalQuit()
+                for ast in grupo_asteroides:
+                    ast.kill()
+                    del ast
                 run = False
                 pygame.mixer.stop()
                 pygame.quit()
@@ -156,15 +163,17 @@ def Game_Start(blind_mode=False):
         for asteroide in grupo_asteroides:
             # +30 pro som demorar um poquinho pra ir embora
             if asteroide.rect.y > screen_height+30:
-                asteroide.stop_sound()  # encerra o som do asteroide
+                # asteroide.stop_sound()  # encerra o som do asteroide
                 qtd_asteroides += 1
                 asteroide.kill()
+                del asteroide
             elif pygame.sprite.spritecollide(asteroide, grupo_naves, False):
                 boom.play()
                 nave.vidas_restantes -= 1
-                asteroide.stop_sound()  # encerra o som do asteroide
+                # asteroide.stop_sound()  # encerra o som do asteroide
                 qtd_asteroides += 1
                 asteroide.kill()
+                del asteroide
             else:
                 asteroide.update()
 
@@ -209,3 +218,5 @@ menu.add_button('Blind Mode', Blind_Game_Start)
 menu.add_button('Sair', pygame_menu.events.EXIT)
 
 menu.mainloop(surface)
+
+oal.oalQuit()
