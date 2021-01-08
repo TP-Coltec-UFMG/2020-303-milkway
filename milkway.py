@@ -4,7 +4,10 @@ import pygame_menu
 from random import randrange
 from radar import generate_mono
 import openal as oal
-import openal.al as al
+import values
+from nave import Nave
+from asteroides import Asteroides
+# import openal.al as al
 
 pygame.init()
 
@@ -16,103 +19,25 @@ boom = oal.oalOpen("assets/sounds/bip2.ogg")
 RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
-f = 0.7  # fator de divisao para tornar o som mais proximo
 
-screen_width = 900
-screen_height = 500
+screen_width = values.screen_width
+screen_height = values.screen_height
 surface = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('MilkWay')
 
 # carrega imagem de fundo
 bg = pygame.image.load("assets/images/espaço.gif")
 
-# definindo cores
-VERMELHO = (255, 0, 0)
-VERDE = (0, 255, 0)
-BRANCO = (255, 255, 255)
-PRETO = (0, 0, 0)
-
 # fonte da letra
 fonte = pygame.font.SysFont("arial", 20, True, False)
 
 
 # coloca imagem de fundo na tela
+
 def draw_bg():
     surface.blit(bg, (0, 0))
-    texto_img = fonte.render("ESTABILIDADE DA NAVE", True, BRANCO)
+    texto_img = fonte.render("ESTABILIDADE DA NAVE", True, values.BRANCO)
     surface.blit(texto_img, (20, 15))
-
-
-def radar(nave, asteroides=[], *args):
-    for a in asteroides:
-        if (a.rect.x-50 <= nave.rect.x) and (a.rect.x+50 >= nave.rect.x):
-            som.play()
-
-
-# Classe Nave principal
-class Nave(pygame.sprite.Sprite):
-    def __init__(self, x, y, vida):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("assets/images/naveEspacial.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-        self.vidas_inicio = vida
-        self.vidas_restantes = vida
-        self.listen = oal.oalGetListener()
-
-    def update(self):
-        # pegar movimentos do teclado
-        velocidade = 8
-        key = pygame.key.get_pressed()
-        if key[pygame.K_LEFT] and self.rect.left > 0:
-            self.rect.x -= velocidade
-        if key[pygame.K_RIGHT] and self.rect.right < screen_width:
-            self.rect.x += velocidade
-
-        # desenha vidas
-        pygame.draw.rect(surface, VERMELHO, (20, 40, self.rect.width, 15))
-        if self.vidas_restantes > 0:
-            pygame.draw.rect(surface, VERDE, (20, 40, int(
-                self.rect.width*(self.vidas_restantes/self.vidas_inicio)), 15))
-
-        # mudando posicao do listener para se adequar a nave
-        self.listen.set_position((self.rect.x, 0, self.rect.y/f))
-
-
-class Asteroides(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("assets/images/asteroides.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-
-        # seleciona um arquivo aleatorio de audio
-        self.source = oal.oalOpen(
-            "assets/sounds/b"+str(randrange(400, 1100, 100))+".wav")
-        self.source.set_looping(True)
-        self.source.set_position((x, 0, y))
-        self.source.play()
-
-    def __del__(self):
-        # quando for deletado essa funcao sera chamada
-        self.stop_sound()
-        del self.source
-
-    def update(self):
-        """
-        Atualiza a posicao do asteroide e a fonte de som dele
-        """
-        self.rect.y += 2
-
-        # atualizando fonte do som
-        self.source.set_position((self.rect.x, 0, self.rect.y/f))
-        self.source.update()
-
-    def stop_sound(self):
-        self.source.stop()
-        # Limpar memória
-        al.alDeleteSources(1, self.source.id)
-
 
 grupo_naves = pygame.sprite.Group()
 nave = Nave(int(screen_width/2), screen_height - 50, 5)
@@ -148,7 +73,7 @@ def Game_Start(blind_mode=False):
                     del ast
                 run = False
                 pygame.mixer.stop()
-                pygame.quit()
+                # pygame.quit()
                 break
             if event.type == RADAREVENT:
                 pass
@@ -177,7 +102,7 @@ def Game_Start(blind_mode=False):
             else:
                 asteroide.update()
 
-        nave.update()
+        nave.update(surface)
         grupo_naves.draw(surface)
         grupo_asteroides.draw(surface)
         if blind_mode:
@@ -219,4 +144,5 @@ menu.add_button('Sair', pygame_menu.events.EXIT)
 
 menu.mainloop(surface)
 
+pygame.quit()
 oal.oalQuit()
