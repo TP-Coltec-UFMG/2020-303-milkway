@@ -1,5 +1,3 @@
-import pygame
-
 f = 0.7  # fator de divisao para tornar o som mais proximo
 
 # dimensoes da tela

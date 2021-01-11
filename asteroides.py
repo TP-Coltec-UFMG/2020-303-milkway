@@ -4,9 +4,12 @@ import openal.al as al
 from random import randrange
 import values
 
+
 class Asteroides(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
+
+        # variaveis de imagem
         self.image = pygame.image.load("assets/images/asteroides.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
@@ -34,6 +37,9 @@ class Asteroides(pygame.sprite.Sprite):
         self.source.update()
 
     def stop_sound(self):
+        """
+        Encerra o som do asteroide
+        """
         self.source.stop()
         # Limpar memória
         al.alDeleteSources(1, self.source.id)

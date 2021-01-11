@@ -2,19 +2,30 @@ import pygame
 import openal as oal
 import values
 
+
 class Nave(pygame.sprite.Sprite):
     def __init__(self, x, y, vida):
         pygame.sprite.Sprite.__init__(self)
+
+        # variaveis de imagem
         self.image = pygame.image.load("assets/images/naveEspacial.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+
+        # variaveis de vida
         self.vidas_inicio = vida
         self.vidas_restantes = vida
+
+        # define o listener
         self.listen = oal.oalGetListener()
 
     def update(self, surface):
-        # pegar movimentos do teclado
+        """
+        Atualiza as variaveis da nave e desenha ela na tela
+        """
         velocidade = 8
+
+        # pegar movimentos do teclado
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT] and self.rect.left > 0:
             self.rect.x -= velocidade

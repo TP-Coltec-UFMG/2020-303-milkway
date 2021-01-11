@@ -7,7 +7,6 @@ import openal as oal
 import values
 from nave import Nave
 from asteroides import Asteroides
-# import openal.al as al
 
 pygame.init()
 
@@ -15,11 +14,13 @@ pygame.init()
 pygame.mixer.init()
 som_radar = generate_mono(440)
 som = pygame.mixer.Sound(som_radar)
-boom = oal.oalOpen("assets/sounds/bip2.ogg")
 RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
+# som da explosao
+boom = oal.oalOpen("assets/sounds/bip2.ogg")
 
+# tela do pygame
 screen_width = values.screen_width
 screen_height = values.screen_height
 surface = pygame.display.set_mode((screen_width, screen_height))
@@ -32,22 +33,28 @@ bg = pygame.image.load("assets/images/espaço.gif")
 fonte = pygame.font.SysFont("arial", 20, True, False)
 
 
-# coloca imagem de fundo na tela
-
 def draw_bg():
+    """
+    Coloca imagem de fundo na tela
+    """
     surface.blit(bg, (0, 0))
     texto_img = fonte.render("ESTABILIDADE DA NAVE", True, values.BRANCO)
     surface.blit(texto_img, (20, 15))
 
+
+# grupo de naves
 grupo_naves = pygame.sprite.Group()
 nave = Nave(int(screen_width/2), screen_height - 50, 5)
 grupo_naves.add(nave)
 
-grupo_asteroides = []
+# grupo de asteroides
 grupo_asteroides = pygame.sprite.Group()
 
 
 def Game_Start(blind_mode=False):
+    """
+    Funcao que comeca o jogo
+    """
     # fps do jogo
     clock = pygame.time.Clock()
     fps = 60
@@ -66,6 +73,7 @@ def Game_Start(blind_mode=False):
         # desenha fundo
         draw_bg()
 
+        # se a pessoa sair encerra o jogo
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 for ast in grupo_asteroides:
@@ -79,30 +87,37 @@ def Game_Start(blind_mode=False):
                 pass
                 # radar(nave, grupo_asteroides)
 
-        # Cria asteroides se não existem na tela
+        # Cria asteroides se a quantidade for menor que a esperada
         if qtd_asteroides > 0:
             qtd_asteroides -= 1
             asteroide = Asteroides(randrange(screen_width - 8), randrange(1))
             grupo_asteroides.add(asteroide)
 
+        # destroi asteroides que sairam da tela ou colidiram
         for asteroide in grupo_asteroides:
-            # +30 pro som demorar um poquinho pra ir embora
+
+            # se saiu da tela
             if asteroide.rect.y > screen_height+30:
-                # asteroide.stop_sound()  # encerra o som do asteroide
                 qtd_asteroides += 1
                 asteroide.kill()
                 del asteroide
+
+            # se colidiu
             elif pygame.sprite.spritecollide(asteroide, grupo_naves, False):
                 boom.play()
-                nave.vidas_restantes -= 1
-                # asteroide.stop_sound()  # encerra o som do asteroide
+                nave.vidas_restantes -= 1   # reduz a vida da nave
                 qtd_asteroides += 1
                 asteroide.kill()
                 del asteroide
+
+            # se nao aconteceu nada so atualiza
             else:
                 asteroide.update()
 
+        # atualiza a nave
         nave.update(surface)
+
+        # desenha informacoes na tela
         grupo_naves.draw(surface)
         grupo_asteroides.draw(surface)
         if blind_mode:
@@ -113,6 +128,9 @@ def Game_Start(blind_mode=False):
 
 
 def Blind_Game_Start():
+    """
+    Inicia o jogo com Blind Mode ativado
+    """
     Game_Start(True)
 
 
