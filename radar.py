@@ -3,6 +3,10 @@ from struct import pack
 from math import sin, pi
 import time
 
+def alarme(nave, som, asteroides=[], *args):
+    for a in asteroides:
+        if (a.rect.x-50 <= nave.rect.x) and (a.rect.x+50 >= nave.rect.x) and (a.rect.y +300 > nave.rect.y):
+            som.play()
 
 def generate_mono(frequency):
     # create a bytestring containing "short" (2-byte) sine values

@@ -2,7 +2,7 @@
 import pygame
 import pygame_menu
 from random import randrange
-from radar import generate_mono
+from radar import generate_mono, alarme
 import openal as oal
 import values
 from nave import Nave
@@ -14,6 +14,7 @@ pygame.init()
 pygame.mixer.init()
 som_radar = generate_mono(440)
 som = pygame.mixer.Sound(som_radar)
+som.set_volume(0.1)
 RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
@@ -84,8 +85,8 @@ def Game_Start(blind_mode=False):
                 # pygame.quit()
                 break
             if event.type == RADAREVENT:
-                pass
-                # radar(nave, grupo_asteroides)
+                # pass
+                alarme(nave, som, grupo_asteroides)
 
         # Cria asteroides se a quantidade for menor que a esperada
         if qtd_asteroides > 0:
