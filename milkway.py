@@ -4,6 +4,7 @@ import pygame_menu
 from random import randrange
 from radar import generate_mono, alarme
 import openal as oal
+import pyttsx3
 import values
 from nave import Nave
 from asteroides import Asteroides
@@ -19,7 +20,7 @@ RADAREVENT = pygame.USEREVENT+1
 pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
 # som da explosao
-boom = oal.oalOpen("assets/sounds/bip2.ogg")
+boom = oal.oalOpen("assets/sounds/bip2.wav")
 
 # tela do pygame
 screen_width = values.screen_width
@@ -33,6 +34,10 @@ bg = pygame.image.load("assets/images/espaço.gif")
 # fonte da letra
 fonte = pygame.font.SysFont("arial", 20, True, False)
 
+# criando objeto que faz a voz
+engine = pyttsx3.init()
+# engine.say("Welcome to Milkway")
+# engine.runAndWait()
 
 def draw_bg():
     """
@@ -111,6 +116,11 @@ def Game_Start(blind_mode=False):
                 asteroide.kill()
                 del asteroide
 
+                if nave.vidas_restantes == 1:
+                    engine.say("Uma vida restante")
+                else:
+                    engine.say(f"{nave.vidas_restantes} vidas restantes")
+                engine.runAndWait()
             # se nao aconteceu nada so atualiza
             else:
                 asteroide.update()

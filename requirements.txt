@@ -2,3 +2,4 @@ PyOpenAL
 PyOgg
 Pygame-menu
 pygame
+pyttsx3
