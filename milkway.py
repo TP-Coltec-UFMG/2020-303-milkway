@@ -137,13 +137,35 @@ def Game_Start(blind_mode=False):
 
     pygame.quit()
 
-
 def Blind_Game_Start():
     """
     Inicia o jogo com Blind Mode ativado
     """
     Game_Start(True)
 
+def Instructions():
+
+    run = True
+
+    while run:
+
+        # desenha fundo
+        instructions_bg = pygame.image.load("assets/images/instrucoes1.jpg")
+        surface.blit(instructions_bg, (0, 0))
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                break
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN: 
+                    Game_Start()
+                if event.key == pygame.K_LEFT: 
+                    menu.mainloop(surface)
+    
+        pygame.display.update()
+
+    pygame.quit()
 
 # Carrega imagem de fundo do Menu
 myimage = pygame_menu.baseimage.BaseImage(
@@ -167,7 +189,7 @@ mytheme = pygame_menu.themes.Theme(
 # Coloca o menu na Tela
 menu = pygame_menu.Menu(screen_height, screen_width, 'MilkWay', theme=mytheme)
 menu.add_button('Jogar', Game_Start)
-menu.add_button('Instrucoes', pygame_menu.events.EXIT)
+menu.add_button('Instrucoes', Instructions)
 menu.add_button('Blind Mode', Blind_Game_Start)
 menu.add_button('Sair', pygame_menu.events.EXIT)
 
