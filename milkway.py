@@ -39,6 +39,7 @@ engine = pyttsx3.init()
 # engine.say("Welcome to Milkway")
 # engine.runAndWait()
 
+
 def draw_bg():
     """
     Coloca imagem de fundo na tela
@@ -144,6 +145,7 @@ def Blind_Game_Start():
     """
     Game_Start(True)
 
+
 def Instructions():
 
     run = True
@@ -167,6 +169,7 @@ def Instructions():
         pygame.display.update()
 
     pygame.quit()
+
 
 # Carrega imagem de fundo do Menu
 myimage = pygame_menu.baseimage.BaseImage(
