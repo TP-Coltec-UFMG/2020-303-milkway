@@ -36,8 +36,6 @@ fonte = pygame.font.SysFont("arial", 20, True, False)
 
 # criando objeto que faz a voz
 engine = pyttsx3.init()
-# engine.say("Welcome to Milkway")
-# engine.runAndWait()
 
 
 def draw_bg():
@@ -45,6 +43,12 @@ def draw_bg():
     Coloca imagem de fundo na tela
     """
     surface.blit(bg, (0, 0))
+
+
+def draw_life():
+    """
+    Exibe a vida da nave
+    """
     texto_img = fonte.render("ESTABILIDADE DA NAVE", True, values.BRANCO)
     surface.blit(texto_img, (20, 15))
 
@@ -79,6 +83,9 @@ def Game_Start(blind_mode=False):
 
         # desenha fundo
         draw_bg()
+
+        # desenha vida
+        draw_life()
 
         # se a pessoa sair encerra o jogo
         for event in pygame.event.get():
@@ -170,6 +177,13 @@ def Instructions():
 
     pygame.quit()
 
+
+# Mensagem antes de aparecer o menu
+# Futuramente contara a historia do jogo
+draw_bg()
+pygame.display.update()
+engine.say("Bem vindo ao Milkway")
+engine.runAndWait()
 
 # Carrega imagem de fundo do Menu
 myimage = pygame_menu.baseimage.BaseImage(
