@@ -10,7 +10,7 @@ class Asteroides(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # variaveis de imagem
-        self.image = pygame.image.load("assets/images/asteroides.png")
+        self.image = pygame.image.load("assets/images/asteroiderosa_2.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
 

@@ -3,9 +3,31 @@ from struct import pack
 from math import sin, pi
 import time
 
+
+def vai_bater(nave, asteroides):
+    nLarg = nave.image.get_width() / 2  # metade da largura da nave
+    nRec = nave.rect
+
+    for a in asteroides:
+        aLarg = a.image.get_width() / 2 # metade da largura do asteroide
+        aRec = a.rect
+
+        # se a direita do asteroide estiver em rota de colisao com a nave
+        if (aRec.x + aLarg >= nRec.x - nLarg) and (aRec.x + aLarg <= nRec.x + nLarg):
+            return True
+
+        # se a esquerda do asteroide estiver em rota de colisao com a nave
+        if (aRec.x - aLarg >= nRec.x - nLarg) and (aRec.x - aLarg <= nRec.x + nLarg):
+            return True
+
+    return False
+
+
 def alarme(nave, som, asteroides=[], *args):
     for a in asteroides:
-        if (a.rect.x-100 <= nave.rect.x) and (a.rect.x+100 >= nave.rect.x) and (a.rect.y +300 > nave.rect.y):
+        reca = a.rect
+        recn = nave.rect
+        if vai_bater(nave, asteroides):
             som.play()
 
 def generate_mono(frequency):

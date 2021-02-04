@@ -104,7 +104,7 @@ def Game_Start(blind_mode=False):
         # Cria asteroides se a quantidade for menor que a esperada
         if qtd_asteroides > 0:
             qtd_asteroides -= 1
-            asteroide = Asteroides(randrange(screen_width - 8), randrange(1))
+            asteroide = Asteroides(randrange(screen_width - 8), -100)
             grupo_asteroides.add(asteroide)
 
         # destroi asteroides que sairam da tela ou colidiram
