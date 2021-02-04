@@ -5,7 +5,7 @@ import time
 
 def alarme(nave, som, asteroides=[], *args):
     for a in asteroides:
-        if (a.rect.x-50 <= nave.rect.x) and (a.rect.x+50 >= nave.rect.x) and (a.rect.y +300 > nave.rect.y):
+        if (a.rect.x-100 <= nave.rect.x) and (a.rect.x+100 >= nave.rect.x) and (a.rect.y +300 > nave.rect.y):
             som.play()
 
 def generate_mono(frequency):
