@@ -1,4 +1,4 @@
-![](assets/images/logo.png)
+![](assets/images/NovoLogo.jpg)
 
 # milkway
 
