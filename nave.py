@@ -8,7 +8,7 @@ class Nave(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # variaveis de imagem
-        self.image = pygame.image.load("assets/images/nave2 (1).png")
+        self.image = pygame.image.load("assets/images/naveEspacial4.png")
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
 
