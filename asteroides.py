@@ -1,7 +1,7 @@
 import pygame
 import openal as oal
 import openal.al as al
-from random import randrange
+import random
 import values
 
 
@@ -9,14 +9,20 @@ class Asteroides(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
+        # lista de imagens para asteroide
+        images = [
+            "assets/images/asteroiderosa_2.png",
+            "assets/images/asteroidelaranja1.png",
+            "assets/images/asteroideAzul1.png"
+        ]
         # variaveis de imagem
-        self.image = pygame.image.load("assets/images/asteroiderosa_2.png")
+        self.image = pygame.image.load(random.choice(images))
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
 
         # seleciona um arquivo aleatorio de audio
         self.source = oal.oalOpen(
-            "assets/sounds/b"+str(randrange(400, 1100, 100))+".wav")
+            "assets/sounds/b"+str(random.randrange(400, 1100, 100))+".wav")
         self.source.set_looping(True)
         self.source.set_position((x, 0, y))
         self.source.play()
