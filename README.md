@@ -1,4 +1,4 @@
-![](assets/images/NovoLogo.jpeg)
+![](assets/images/NovoLogo.jpg)
 
 # milkway
 
