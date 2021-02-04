@@ -137,10 +137,11 @@ def Game_Start(blind_mode=False):
         nave.update(surface)
 
         # desenha informacoes na tela
-        grupo_naves.draw(surface)
         grupo_asteroides.draw(surface)
         if blind_mode:
             surface.fill((0, 0, 0))
+
+        grupo_naves.draw(surface)
         pygame.display.update()
 
     pygame.quit()
