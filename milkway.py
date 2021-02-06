@@ -151,6 +151,14 @@ def Game_Start(blind_mode=False):
 
                 if nave.vidas_restantes == 1:
                     engine.say("Uma vida restante")
+                    
+                elif nave.vidas_restantes < 1:   # Game_Over
+                    nave.vidas_restantes = 5
+                    for ast in grupo_asteroides:
+                        ast.kill()
+                        del ast
+                    Game_Over()
+                    
                 else:
                     engine.say(f"{nave.vidas_restantes} vidas restantes")
                 engine.runAndWait()
@@ -177,7 +185,10 @@ def Blind_Game_Start():
     Inicia o jogo com Blind Mode ativado
     """
     Game_Start(True)
-
+    
+def Game_Over():
+    current_menu = gameover.get_current()
+    current_menu.mainloop(surface)
 
 def Instructions():
 
@@ -186,7 +197,7 @@ def Instructions():
     while run:
 
         # desenha fundo
-        instructions_bg = pygame.image.load("assets/images/instrucoes1.jpg")
+        instructions_bg = pygame.image.load("assets/images/instrucoes2.jpg")
         surface.blit(instructions_bg, (0, 0))
 
         for event in pygame.event.get():
@@ -221,7 +232,7 @@ myimage = pygame_menu.baseimage.BaseImage(
 font = pygame_menu.font.FONT_8BIT
 
 # Cria a Theme do Menu
-mytheme = pygame_menu.themes.Theme(
+menutheme = pygame_menu.themes.Theme(
     title_background_color=(0, 0, 0),
     background_color=myimage,
     title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_NONE,
@@ -230,9 +241,17 @@ mytheme = pygame_menu.themes.Theme(
     title_offset=(300, 100),
 )
 
-# Coloca o menu na Tela
-menu = pygame_menu.Menu(screen_height, screen_width, 'MilkWay', theme=mytheme)
+gameovertheme = pygame_menu.themes.Theme(
+    title_background_color=(0, 0, 0),
+    background_color=(0, 0, 0),
+    title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_NONE,
+    widget_font=font,
+    title_font=font,
+    title_offset=(300, 100),
+)
 
+
+menu = pygame_menu.Menu(screen_height, screen_width, 'MilkWay', theme=menutheme)
 btn = menu.add_button('Jogar', Game_Start)
 btn.add_draw_callback(speakButton)
 btn = menu.add_button('Instrucoes', Instructions)
@@ -242,7 +261,15 @@ btn.add_draw_callback(speakButton)
 btn = menu.add_button('Sair', pygame_menu.events.EXIT)
 btn.add_draw_callback(speakButton)
 
-menu.mainloop(surface)
+def Main_Menu():
+    current_menu = menu.get_current()
+    current_menu.mainloop(surface)
+
+gameover = pygame_menu.Menu(screen_height, screen_width, 'GAMEOVER', theme=gameovertheme)
+btn = gameover.add_button('Voltar', Main_Menu)
+btn = gameover.add_button('Sair', pygame_menu.events.EXIT)
+
+Main_Menu()
 
 pygame.quit()
 oal.oalQuit()
