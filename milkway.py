@@ -197,7 +197,7 @@ def Instructions():
     while run:
 
         # desenha fundo
-        instructions_bg = pygame.image.load("assets/images/instrucoes2.jpg")
+        instructions_bg = pygame.image.load("assets/images/instrucoes.jpg")
         surface.blit(instructions_bg, (0, 0))
 
         for event in pygame.event.get():
