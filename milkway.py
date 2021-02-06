@@ -22,6 +22,34 @@ pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 # som da explosao
 boom = oal.oalOpen("assets/sounds/bip2.wav")
 
+# criando objeto que faz a voz
+engine = pyttsx3.init()
+
+
+# Narrador dos botões
+def speakButton(widget, menu):
+    if menu.get_selected_widget() == widget:
+        # Contador pra esperar o botão renderizar antes de falar
+        itera = menu.get_attribute("iter", 0)
+        # Botão selecionado antes do atual
+        lBtn = menu.get_attribute("lastButton")
+        if lBtn != widget:
+            menu.set_attribute("lastButton", widget)
+            itera = 0
+
+        if itera > 3:
+            texto = widget.get_title()
+            engine.say(texto)
+            engine.runAndWait()
+            itera = -1  # Não falar dnv até mudar de botão
+
+        if itera == -1:
+            somar = 0
+        else:
+            somar = 1
+        menu.set_attribute("iter", itera + somar)
+
+
 # tela do pygame
 screen_width = values.screen_width
 screen_height = values.screen_height
@@ -33,9 +61,6 @@ bg = pygame.image.load("assets/images/espaço.gif")
 
 # fonte da letra
 fonte = pygame.font.SysFont("arial", 20, True, False)
-
-# criando objeto que faz a voz
-engine = pyttsx3.init()
 
 
 def draw_bg():
@@ -207,10 +232,15 @@ mytheme = pygame_menu.themes.Theme(
 
 # Coloca o menu na Tela
 menu = pygame_menu.Menu(screen_height, screen_width, 'MilkWay', theme=mytheme)
-menu.add_button('Jogar', Game_Start)
-menu.add_button('Instrucoes', Instructions)
-menu.add_button('Blind Mode', Blind_Game_Start)
-menu.add_button('Sair', pygame_menu.events.EXIT)
+
+btn = menu.add_button('Jogar', Game_Start)
+btn.add_draw_callback(speakButton)
+btn = menu.add_button('Instrucoes', Instructions)
+btn.add_draw_callback(speakButton)
+btn = menu.add_button('Blind Mode', Blind_Game_Start)
+btn.add_draw_callback(speakButton)
+btn = menu.add_button('Sair', pygame_menu.events.EXIT)
+btn.add_draw_callback(speakButton)
 
 menu.mainloop(surface)
 
