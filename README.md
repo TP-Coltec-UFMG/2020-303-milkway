@@ -15,7 +15,9 @@ Pensando nas dificuldades que muitos deficientes visuais têm em participar de j
 Para que a experiência seja completa, é imprescindível o uso de fones de ouvido.
 
 #### Tela do jogo. 
+
 ![](assets/images/jogo.jpeg)
+
 Asteroides de múltiplas cores vibrantes voam pelo espaço estrelado indo em direção a uma nave. Barra de vida no canto superior esquerdo logo abaixo da frase “Estabilidade da nave”.
 
 ### Pré-requisitos :heavy_check_mark:
