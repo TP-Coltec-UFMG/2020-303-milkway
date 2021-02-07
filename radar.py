@@ -29,8 +29,9 @@ def alarme(nave, som, asteroides=[], *args):
         recn = nave.rect
         if vai_bater(nave, asteroides):
             dist = recn.y - reca.y
-            som.set_volume(10/dist)
-            som.play()
+            if dist != 0:
+                som.set_volume(10/dist)
+                som.play()
 
 def generate_mono(frequency):
     # create a bytestring containing "short" (2-byte) sine values
