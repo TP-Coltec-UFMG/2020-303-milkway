@@ -117,7 +117,7 @@ def Game_Start(blind_mode=False):
             if event.type == pygame.QUIT:
                 for ast in grupo_asteroides:
                     ast.kill()
-                    del ast
+                    ast.stop_sound()
                 run = False
                 pygame.mixer.stop()
                 # pygame.quit()
@@ -139,7 +139,7 @@ def Game_Start(blind_mode=False):
             if asteroide.rect.y > screen_height+30:
                 qtd_asteroides += 1
                 asteroide.kill()
-                del asteroide
+                asteroide.stop_sound()
 
             # se colidiu
             elif pygame.sprite.spritecollide(asteroide, grupo_naves, False):
@@ -147,18 +147,18 @@ def Game_Start(blind_mode=False):
                 nave.vidas_restantes -= 1   # reduz a vida da nave
                 qtd_asteroides += 1
                 asteroide.kill()
-                del asteroide
+                asteroide.stop_sound()
 
                 if nave.vidas_restantes == 1:
                     engine.say("Uma vida restante")
-                    
+
                 elif nave.vidas_restantes < 1:   # Game_Over
                     nave.vidas_restantes = 5
                     for ast in grupo_asteroides:
                         ast.kill()
-                        del ast
+                        ast.destroy()
                     Game_Over()
-                    
+
                 else:
                     engine.say(f"{nave.vidas_restantes} vidas restantes")
                 engine.runAndWait()
@@ -185,10 +185,12 @@ def Blind_Game_Start():
     Inicia o jogo com Blind Mode ativado
     """
     Game_Start(True)
-    
+
+
 def Game_Over():
     current_menu = gameover.get_current()
     current_menu.mainloop(surface)
+
 
 def Instructions():
 
@@ -260,6 +262,7 @@ btn = menu.add_button('Blind Mode', Blind_Game_Start)
 btn.add_draw_callback(speakButton)
 btn = menu.add_button('Sair', pygame_menu.events.EXIT)
 btn.add_draw_callback(speakButton)
+
 
 def Main_Menu():
     current_menu = menu.get_current()
