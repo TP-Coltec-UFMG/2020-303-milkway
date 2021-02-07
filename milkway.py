@@ -270,7 +270,9 @@ def Main_Menu():
 
 gameover = pygame_menu.Menu(screen_height, screen_width, 'GAMEOVER', theme=gameovertheme)
 btn = gameover.add_button('Voltar', Main_Menu)
+btn.add_draw_callback(speakButton)
 btn = gameover.add_button('Sair', pygame_menu.events.EXIT)
+btn.add_draw_callback(speakButton)
 
 Main_Menu()
 
