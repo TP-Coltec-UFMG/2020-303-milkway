@@ -24,18 +24,27 @@ class Option:
 
 
 class Menu:
-    def __init__(self, options, win):
+    def __init__(self, options, image, win, title="Milkway"):
         self.options = options
         self.win = win
         self.selected = 0
+        self.image = image
+        self.title = title
 
     def loop(self):
         run = True
         while run:
+            self.print_win()
             e = pygame.event.get()
-            self.atualiza_selected(pygame.event.get())
-            if e.type == pygame.K_SPACE:
-                self.options[self.selected][1]()
+            for event in e:
+                self.atualiza_selected(event)
+                if event.type == pygame.KEYDOWN:
+                    if event.key != pygame.K_DOWN and event.key != pygame.K_UP:
+                        self.options[self.selected][1]()
+                if event.type == pygame.QUIT:
+                    exit()
+                    run = False
+                    break
 
     def atualiza_selected(self, e):
         """Recebe os eventos e atualiza a opcao selecionada"""
@@ -52,16 +61,18 @@ class Menu:
     def print_win(self):
         """Printa uma tela com destaque na opcao selecionada"""
         font = pygame.font.SysFont("Comic Sans MS", 30)
-        title = font.render("PyBird", False, values.BRANCO)
-        desc = font.render("Pressione espaço para iniciar", False, values.BRANCO)
+        title = font.render(self.title, False, values.BRANCO)
+        desc = font.render("Pressione qualquer tecla para escolher", False, values.BRANCO)
         options = []
         for i in range(len(self.options)):
-            option = Option(self.options[i], 10, (i + 1) * 100)
+            option = Option(self.options[i][0], 10, (i + 1) * 100)
             if i == self.selected:
                 option.set_selected()
             options.append(option)
-        self.win.fill((0, 0, 0))
+        self.image.update()
+        self.image.desenha(self.win)
         self.win.blit(title, (0, 0))
         self.win.blit(desc, (0, 50))
         for option in options:
             option.print_option(self.win)
+        pygame.display.update()
