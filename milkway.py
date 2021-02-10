@@ -1,4 +1,3 @@
-# Precisa baixar: pip install pygame-menu
 import pygame
 import pygame_menu
 from random import randrange
@@ -28,6 +27,9 @@ engine = pyttsx3.init()
 
 # Narrador dos botões
 def speakButton(widget, menu):
+    """
+    Recebe widget e menu. Uma voz diz o que esta escrito no widget
+    """
     if menu.get_selected_widget() == widget:
         # Contador pra esperar o botão renderizar antes de falar
         itera = menu.get_attribute("iter", 0)
@@ -88,7 +90,7 @@ grupo_naves.add(nave)
 grupo_asteroides = pygame.sprite.Group()
 
 
-def Game_Start(blind_mode=False):
+def game_start(blind_mode=False):
     """
     Funcao que comeca o jogo
     """
@@ -113,8 +115,8 @@ def Game_Start(blind_mode=False):
         # desenha vida
         draw_life()
 
-        # se a pessoa sair encerra o jogo
         for event in pygame.event.get():
+            # se a pessoa sair encerra o jogo
             if event.type == pygame.QUIT:
                 for ast in grupo_asteroides:
                     ast.kill()
@@ -123,8 +125,8 @@ def Game_Start(blind_mode=False):
                 pygame.mixer.stop()
                 # pygame.quit()
                 break
+            # se passou determinado tempo chama funcao alarme
             if event.type == RADAREVENT:
-                # pass
                 alarme(nave, som, grupo_asteroides)
 
         # Cria asteroides se a quantidade for menor que a esperada
@@ -150,6 +152,7 @@ def Game_Start(blind_mode=False):
                 asteroide.kill()
                 asteroide.stop_sound()
 
+                # Diz a quantidade de vidas caso vidas_restantes > 0
                 if nave.vidas_restantes == 1:
                     engine.say("Uma vida restante")
 
@@ -158,7 +161,7 @@ def Game_Start(blind_mode=False):
                     for ast in grupo_asteroides:
                         ast.kill()
                         ast.destroy()
-                    Game_Over()
+                    game_over()
 
                 else:
                     engine.say(f"{nave.vidas_restantes} vidas restantes")
@@ -172,8 +175,10 @@ def Game_Start(blind_mode=False):
 
         # desenha informacoes na tela
         grupo_asteroides.draw(surface)
+
+        # blind_mode exibe apenas a nave em um fundo preto
         if blind_mode:
-            surface.fill((0, 0, 0))
+            surface.fill(values.PRETO)
 
         grupo_naves.draw(surface)
         pygame.display.update()
@@ -181,20 +186,34 @@ def Game_Start(blind_mode=False):
     pygame.quit()
 
 
-def Blind_Game_Start():
+def blind_game_start():
     """
     Inicia o jogo com Blind Mode ativado
     """
-    Game_Start(True)
+    game_start(True)
 
 
-def Game_Over():
+def game_over():
+    """
+    Define o Game Over como menu atual
+    """
     current_menu = gameover.get_current()
     current_menu.mainloop(surface)
 
 
-def Instructions():
+def main_menu():
+    """
+    Define o Menu principal como menu atual
+    """
+    current_menu = menu.get_current()
+    current_menu.mainloop(surface)
 
+
+def instructions():
+    """
+    Exibe imagem com as intstrucoes do jogo
+    """
+    # controlador pra sair
     run = True
 
     while run:
@@ -204,12 +223,15 @@ def Instructions():
         surface.blit(instructions_bg, (0, 0))
 
         for event in pygame.event.get():
+            # se a pessoa sair encerra o jogo
             if event.type == pygame.QUIT:
                 run = False
                 break
             if event.type == pygame.KEYDOWN:
+                # se a pessoa aperta enter inicia o jogo
                 if event.key == pygame.K_RETURN:
-                    Game_Start()
+                    game_start()
+                # se a pessoa aperta seta esquerda volta pro menu
                 if event.key == pygame.K_LEFT:
                     menu.mainloop(surface)
 
@@ -244,6 +266,7 @@ menutheme = pygame_menu.themes.Theme(
     title_offset=(300, 100),
 )
 
+# Cria a Theme do Game Over
 gameovertheme = pygame_menu.themes.Theme(
     title_background_color=(0, 0, 0),
     background_color=(0, 0, 0),
@@ -253,29 +276,27 @@ gameovertheme = pygame_menu.themes.Theme(
     title_offset=(300, 100),
 )
 
-
+# Cria o Menu principal
 menu = pygame_menu.Menu(screen_height, screen_width, 'MilkWay', theme=menutheme)
-btn = menu.add_button('Jogar', Game_Start)
+# Adiciona botoes com voz descritiva
+btn = menu.add_button('Jogar', game_start)
 btn.add_draw_callback(speakButton)
-btn = menu.add_button('Instrucoes', Instructions)
+btn = menu.add_button('Instrucoes', instructions)
 btn.add_draw_callback(speakButton)
-btn = menu.add_button('Blind Mode', Blind_Game_Start)
+btn = menu.add_button('Blind Mode', blind_game_start)
 btn.add_draw_callback(speakButton)
 btn = menu.add_button('Sair', pygame_menu.events.EXIT)
 btn.add_draw_callback(speakButton)
 
-
-def Main_Menu():
-    current_menu = menu.get_current()
-    current_menu.mainloop(surface)
-
+# Cria o menu de Game Over
 gameover = pygame_menu.Menu(screen_height, screen_width, 'GAMEOVER', theme=gameovertheme)
-btn = gameover.add_button('Voltar', Main_Menu)
+# Adiciona botoes com voz descritiva
+btn = gameover.add_button('Voltar', main_menu)
 btn.add_draw_callback(speakButton)
 btn = gameover.add_button('Sair', pygame_menu.events.EXIT)
 btn.add_draw_callback(speakButton)
 
-Main_Menu()
+main_menu()
 
 pygame.quit()
 oal.oalQuit()

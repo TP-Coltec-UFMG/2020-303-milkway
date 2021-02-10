@@ -40,7 +40,7 @@ class Asteroides(pygame.sprite.Sprite):
         self.source.set_position((self.rect.x, 0, self.rect.y/values.f))
         self.source.update()
 
-    def stop_sound(self, deleteBuffer=False):
+    def stop_sound(self, deletebuffer=False):
         """
         Encerra o som do asteroide
         """
@@ -48,7 +48,5 @@ class Asteroides(pygame.sprite.Sprite):
         # Limpar memória
         b = self.source.buffer
         al.alDeleteSources(1, self.source.id)
-        if (deleteBuffer):
+        if deletebuffer:
             b.destroy()
-
-        
