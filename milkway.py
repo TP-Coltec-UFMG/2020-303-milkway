@@ -55,6 +55,7 @@ screen_width = values.screen_width
 screen_height = values.screen_height
 surface = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('MilkWay')
+pygame.display.set_icon(pygame.image.load("assets/images/naveEspacial4.png"))
 
 # carrega imagem de fundo
 bg = pygame.image.load("assets/images/espaço.gif")
