@@ -20,6 +20,8 @@ pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
 # som da explosao
 boom = oal.oalOpen("assets/sounds/bip2.wav")
+# som do inicio
+inicio = pygame.mixer.Sound("assets/sounds/inicio.mp3")
 # som das instrucoes
 instrucoes = pygame.mixer.Sound("assets/sounds/instrucoes.mp3")
 
@@ -211,6 +213,29 @@ def main_menu():
     current_menu.mainloop(surface)
 
 
+def inicio_jogo():
+    """
+    Contando a historia no inicio do jogo
+    """
+    # controlador pra sair
+    run = True
+
+    # inicio em audio
+    inicio.play()
+    while run:
+        for event in pygame.event.get():
+            # se a pessoa sair encerra o jogo
+            if event.type == pygame.QUIT:
+                exit()
+            # se a pessoa apertar qualquer tecla
+            if event.type == pygame.KEYDOWN:
+                run = False
+        if not pygame.mixer.get_busy():
+            run = False
+    pygame.mixer.stop()
+
+
+
 def instructions():
     """
     Exibe imagem com as intstrucoes do jogo
@@ -250,8 +275,9 @@ def instructions():
 # Futuramente contara a historia do jogo
 draw_bg()
 pygame.display.update()
-engine.say("Bem vindo ao Milkway")
-engine.runAndWait()
+inicio_jogo()
+# engine.say("Bem vindo ao Milkway")
+# engine.runAndWait()
 
 # Carrega imagem de fundo do Menu
 myimage = pygame_menu.baseimage.BaseImage(
