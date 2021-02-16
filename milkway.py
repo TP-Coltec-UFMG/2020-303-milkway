@@ -20,6 +20,8 @@ pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 
 # som da explosao
 boom = oal.oalOpen("assets/sounds/bip2.wav")
+# som das instrucoes
+instrucoes = pygame.mixer.Sound("assets/sounds/instrucoes.mp3")
 
 # criando objeto que faz a voz
 engine = pyttsx3.init()
@@ -216,6 +218,8 @@ def instructions():
     # controlador pra sair
     run = True
 
+    # instrucoes em audio
+    instrucoes.play()
     while run:
 
         # desenha fundo
@@ -230,9 +234,11 @@ def instructions():
             if event.type == pygame.KEYDOWN:
                 # se a pessoa aperta enter inicia o jogo
                 if event.key == pygame.K_RETURN:
+                    pygame.mixer.stop()
                     game_start()
                 # se a pessoa aperta seta esquerda volta pro menu
                 if event.key == pygame.K_LEFT:
+                    pygame.mixer.stop()
                     menu.mainloop(surface)
 
         pygame.display.update()
