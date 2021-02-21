@@ -106,11 +106,11 @@ def game_start(blind_mode=False):
     fps = 60
 
     # qtd de asteroides criados por vez
-    qtd_asteroides = 
-    
+    qtd_asteroides = 2
+
     # pontuação do jogo
     score = 0
-    
+
     # cria o restaurante
     restaurante = Restaurante(int(screen_width/2), -150)
     restaurant.add(restaurante)
@@ -142,7 +142,13 @@ def game_start(blind_mode=False):
             # se passou determinado tempo chama funcao alarme
             if event.type == RADAREVENT:
                 alarme(nave, som, grupo_asteroides)
-                
+
+        # Cria asteroides se a quantidade for menor que a esperada
+        if qtd_asteroides > 0:
+            qtd_asteroides -= 1
+            asteroide = Asteroides(randrange(screen_width - 8), -100)
+            grupo_asteroides.add(asteroide)
+
         # ganhar o jogo
         if score >= 20:
             for ast in grupo_asteroides:
@@ -160,11 +166,6 @@ def game_start(blind_mode=False):
                     restaurante.kill()
                     main_menu()
 
-        # Cria asteroides se a quantidade for menor que a esperada
-        if qtd_asteroides > 0:
-            qtd_asteroides -= 1
-            asteroide = Asteroides(randrange(screen_width - 8), -100)
-            grupo_asteroides.add(asteroide)
 
         # destroi asteroides que sairam da tela ou colidiram
         for asteroide in grupo_asteroides:
@@ -172,6 +173,7 @@ def game_start(blind_mode=False):
             # se saiu da tela
             if asteroide.rect.y > screen_height+30:
                 qtd_asteroides += 1
+                score += 1
                 asteroide.kill()
                 asteroide.stop_sound()
 
@@ -187,7 +189,8 @@ def game_start(blind_mode=False):
                 if nave.vidas_restantes == 1:
                     engine.say("Uma vida restante")
 
-                elif nave.vidas_restantes < 1:   # Game_Over
+                # Game_Over
+                elif nave.vidas_restantes < 1:
                     nave.vidas_restantes = 5
                     for ast in grupo_asteroides:
                         ast.kill()
@@ -230,7 +233,6 @@ def game_over():
     """
     current_menu = gameover.get_current()
     current_menu.mainloop(surface)
-
 
 def main_menu():
     """
@@ -359,3 +361,4 @@ main_menu()
 
 pygame.quit()
 oal.oalQuit()
+
