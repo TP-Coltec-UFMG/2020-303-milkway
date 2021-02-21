@@ -7,6 +7,7 @@ import pyttsx3
 import values
 from nave import Nave
 from asteroides import Asteroides
+from restaurante import Restaurante
 
 pygame.init()
 
@@ -93,6 +94,8 @@ grupo_naves.add(nave)
 # grupo de asteroides
 grupo_asteroides = pygame.sprite.Group()
 
+# grupo de restaurantes
+restaurant = pygame.sprite.Group()
 
 def game_start(blind_mode=False):
     """
@@ -103,7 +106,14 @@ def game_start(blind_mode=False):
     fps = 60
 
     # qtd de asteroides criados por vez
-    qtd_asteroides = 2
+    qtd_asteroides = 
+    
+    # pontuação do jogo
+    score = 0
+    
+    # cria o restaurante
+    restaurante = Restaurante(int(screen_width/2), -150)
+    restaurant.add(restaurante)
 
     # controlador para sair
     run = True
@@ -132,6 +142,23 @@ def game_start(blind_mode=False):
             # se passou determinado tempo chama funcao alarme
             if event.type == RADAREVENT:
                 alarme(nave, som, grupo_asteroides)
+                
+        # ganhar o jogo
+        if score >= 20:
+            for ast in grupo_asteroides:
+                ast.kill()
+                ast.stop_sound()
+            pygame.mixer.stop()
+            
+            restaurant.draw(surface)
+            if restaurante.rect.y < 100:
+                restaurante.update()
+
+            if event.type == pygame.KEYDOWN:
+                # se a pessoa aperta enter volta para o main menu
+                if event.key == pygame.K_RETURN:
+                    restaurante.kill()
+                    main_menu()
 
         # Cria asteroides se a quantidade for menor que a esperada
         if qtd_asteroides > 0:
