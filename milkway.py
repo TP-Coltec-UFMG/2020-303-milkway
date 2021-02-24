@@ -196,7 +196,7 @@ def game_start(blind_mode=False):
             grupo_asteroides.add(asteroide)
 
         # ganhar o jogo
-        if score >= 3:
+        if score >= 20:
             for ast in grupo_asteroides:
                 ast.kill()
                 ast.stop_sound()
