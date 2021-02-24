@@ -25,6 +25,8 @@ boom = oal.oalOpen("assets/sounds/bip2.wav")
 inicio = pygame.mixer.Sound("assets/sounds/inicio.mp3")
 # som das instrucoes
 instrucoes = pygame.mixer.Sound("assets/sounds/instrucoes.mp3")
+# som do jogo ganho
+ganhou = pygame.mixer.Sound("assets/sounds/ganhou.mp3")
 
 # criando objeto que faz a voz
 engine = pyttsx3.init()
@@ -97,6 +99,50 @@ grupo_asteroides = pygame.sprite.Group()
 # grupo de restaurantes
 restaurant = pygame.sprite.Group()
 
+
+def ganhar_jogo(restaurante, blind_mode):
+    ganhou.play()
+    # fps do jogo
+    clock = pygame.time.Clock()
+    fps = 60
+
+    # controlador para sair
+    run = True
+
+    while run:
+
+        # fps da tela
+        clock.tick(fps)
+
+        # desenha fundo
+        draw_bg()
+
+        # desenha vida
+        draw_life()
+
+        restaurant.draw(surface)
+        if restaurante.rect.y < 100:
+            restaurante.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                # se a pessoa aperta enter volta para o main menu
+                if event.key == pygame.K_RETURN:
+                    pygame.mixer.stop()
+                    restaurante.kill()
+                    main_menu()
+
+        # atualiza a nave
+        nave.update(surface)
+
+        # blind_mode exibe apenas a nave em um fundo preto
+        if blind_mode:
+            surface.fill(values.PRETO)
+
+        grupo_naves.draw(surface)
+        pygame.display.update()
+
+
 def game_start(blind_mode=False):
     """
     Funcao que comeca o jogo
@@ -150,21 +196,21 @@ def game_start(blind_mode=False):
             grupo_asteroides.add(asteroide)
 
         # ganhar o jogo
-        if score >= 20:
+        if score >= 3:
             for ast in grupo_asteroides:
                 ast.kill()
                 ast.stop_sound()
             pygame.mixer.stop()
-            
-            restaurant.draw(surface)
-            if restaurante.rect.y < 100:
-                restaurante.update()
+            ganhar_jogo(restaurante, blind_mode)
+            #restaurant.draw(surface)
+            #if restaurante.rect.y < 100:
+            #    restaurante.update()
 
-            if event.type == pygame.KEYDOWN:
-                # se a pessoa aperta enter volta para o main menu
-                if event.key == pygame.K_RETURN:
-                    restaurante.kill()
-                    main_menu()
+            #if event.type == pygame.KEYDOWN:
+            #    # se a pessoa aperta enter volta para o main menu
+            #    if event.key == pygame.K_RETURN:
+            #        restaurante.kill()
+            #        main_menu()
 
 
         # destroi asteroides que sairam da tela ou colidiram
@@ -231,6 +277,8 @@ def game_over():
     """
     Define o Game Over como menu atual
     """
+    engine.say("Fim de jogo")
+    engine.runAndWait()
     current_menu = gameover.get_current()
     current_menu.mainloop(surface)
 
