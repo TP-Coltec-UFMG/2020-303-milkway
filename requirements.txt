@@ -1,5 +1,5 @@
-PyOpenAL
-PyOgg
-Pygame-menu
-pygame
-pyttsx3
+PyOpenAL==0.7.11a1
+PyOgg==0.6.14a1
+pygame-menu==3.5.6
+pygame==2.0.0
+pyttsx3==2.90
