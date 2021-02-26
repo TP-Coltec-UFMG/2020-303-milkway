@@ -22,7 +22,7 @@ pygame.time.set_timer(RADAREVENT, 750)  # 750 ms para cada apito
 # som da explosao
 boom = oal.oalOpen("assets/sounds/bip2.wav")
 # som do inicio
-inicio = pygame.mixer.Sound("assets/sounds/inicio.mp3")
+inicio = pygame.mixer.Sound("assets/sounds/historia.mp3")
 # som das instrucoes
 instrucoes = pygame.mixer.Sound("assets/sounds/instrucoes.mp3")
 # som do jogo ganho
