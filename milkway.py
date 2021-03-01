@@ -147,6 +147,8 @@ def game_start(blind_mode=False):
     """
     Funcao que comeca o jogo
     """
+
+    nave.vidas_restantes = 5
     # fps do jogo
     clock = pygame.time.Clock()
     fps = 60
@@ -172,9 +174,6 @@ def game_start(blind_mode=False):
         # desenha fundo
         draw_bg()
 
-        # desenha vida
-        draw_life()
-
         for event in pygame.event.get():
             # se a pessoa sair encerra o jogo
             if event.type == pygame.QUIT:
@@ -196,7 +195,7 @@ def game_start(blind_mode=False):
             grupo_asteroides.add(asteroide)
 
         # ganhar o jogo
-        if score >= 20:
+        if score >= 2:
             for ast in grupo_asteroides:
                 ast.kill()
                 ast.stop_sound()
@@ -250,8 +249,6 @@ def game_start(blind_mode=False):
             else:
                 asteroide.update()
 
-        # atualiza a nave
-        nave.update(surface)
 
         # desenha informacoes na tela
         grupo_asteroides.draw(surface)
@@ -260,7 +257,11 @@ def game_start(blind_mode=False):
         if blind_mode:
             surface.fill(values.PRETO)
 
+        # desenha vida
+        draw_life()
         grupo_naves.draw(surface)
+        # atualiza a nave
+        nave.update(surface)
         pygame.display.update()
 
     pygame.quit()
